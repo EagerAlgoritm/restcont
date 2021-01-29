@@ -39,7 +39,7 @@ public class UserRestController {
     }
 
 
-    @PostMapping("admin/delete")
+    @PutMapping("admin/delete")
     public String deleteUser(String id){
         userService.deleteUser(Integer.parseInt(id));
 
