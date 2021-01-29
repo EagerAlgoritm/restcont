@@ -1,4 +1,3 @@
-
 const option = $("<option></option>");
 const tr = $("<tr></tr>");
 const td = $("<td></td>");
@@ -31,25 +30,34 @@ $(document).ready(function () {
 })
 
 function editUser() {
+
+    let optionRoles = $("#roles")[0];
+    let selectedRoles = [];
+
+    for (let i = 0; i < optionRoles.options.length; i++) {
+        if (optionRoles.options[i].selected) {
+            selectedRoles.push({id: parseInt(optionRoles.options[i].value), role: optionRoles.options[i].text});
+        }
+    }
+
     $.ajax("/api/admin/edit", {
         method: "post",
-        data: {
-            user:
-                JSON.stringify(
-                    {
-                        id: $("#editModalUser").attr("value"),
-                        login: $("#editLogin").val(),
-                        password: $("#editPassword").val(),
-                        email: $("#editEmail").val(),
-                        firstName: $("#editFirstName").val(),
-                        lastName: $("#editLastName").val(),
-                        age: $("#editAge").val()
-                    }),
-            roleIds:
-                JSON.stringify($("#roles").val())
-        },
+        contentType: 'application/json',
+        data:
+            JSON.stringify(
+                {
+                    id: parseInt($("#editModalUser").attr("value")),
+                    login: $("#editLogin").val(),
+                    password: $("#editPassword").val(),
+                    email: $("#editEmail").val(),
+                    firstName: $("#editFirstName").val(),
+                    lastName: $("#editLastName").val(),
+                    age: parseInt($("#editAge").val()),
+                    role: selectedRoles
+                }),
 
         dataType: "json",
+
         success: function (msg) {
             $("#login" + msg.id).text(msg.login);
             $("#password" + msg.id).text(msg.password);
@@ -93,21 +101,30 @@ function deleteUser() {
 }
 
 function addUser() {
+
+    let optionRoles = $("#addRoles")[0];
+    let selectedRoles = [];
+
+    for (let i = 0; i < optionRoles.options.length; i++) {
+        if (optionRoles.options[i].selected) {
+            selectedRoles.push({id: parseInt(optionRoles.options[i].value), role: optionRoles.options[i].text});
+        }
+    }
+
     $.ajax("/api/admin/add", {
         method: "post",
+        contentType: 'application/json',
         data:
-            {
-                user: JSON.stringify(
-                    {
-                        login: addLogin.val(),
-                        password: addPassword.val(),
-                        email: addEmail.val(),
-                        firstName: addFirstName.val(),
-                        lastName: addLastName.val(),
-                        age: addAge.val()
-                    }),
-                roleIds: JSON.stringify(addRoles.val())
-            },
+            JSON.stringify(
+                {
+                    login: addLogin.val(),
+                    password: addPassword.val(),
+                    email: addEmail.val(),
+                    firstName: addFirstName.val(),
+                    lastName: addLastName.val(),
+                    age: addAge.val(),
+                    role: selectedRoles
+                }),
 
         dataType: "json",
         success: function (msg) {
