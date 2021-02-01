@@ -87,7 +87,7 @@ function editUserUnselectRoles() {
 
 function deleteUser() {
     $.ajax("/api/admin/delete", {
-        method: "put",
+        method: "delete",
         data: {id: $("#deleteModalUser").attr("value")},
         dataType: "text",
 
